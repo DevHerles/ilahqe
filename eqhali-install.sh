@@ -97,6 +97,9 @@ select yn in "Yes" "No"; do
 		echo -e "\n---- Install python libraries ----"
 		sudo pip install gdata psycogreen ofxparse XlsxWriter xlrd pyPdf 
 		sudo pip install --upgrade pip
+		sudo pip install httplib2
+		sudo pip install pyPdf
+		sudo pip install jr_tools
 
 		echo -e "\n--- Install other required packages"
 		sudo apt-get install node-clean-css -y
@@ -468,9 +471,15 @@ sudo chown $ODOO_USER:$ODOO_USER $ODOO_LOG
 sudo systemctl daemon-reload
 sudo systemctl enable $ODOO_SERVER_SERVICE 
 sudo systemctl enable $JASPER_SERVER_SERVICE 
+
+export JASPER_URL=http://localhost:8080/jasperserver
+export JASPER_USERNAME=jasperadmin
+export JASPER_PASSWORD=jasperadmin
+
+cd $MINSA_ADDONS_PATH/hcesg_segundo_nivel/ && jr_tools load jasper.yml && cd ~
+
 echo -e "* Starting $ODOO_SERVER..."
 sudo systemctl start $ODOO_SERVER
-
 sudo systemctl enable $ODOO_SERVER_SERVICE
 sudo service $ODOO_SERVER status
 printf "\n\n\n${GREEN}%s${NORMAL}\n" "La instalación ha finalizado correctamente."
